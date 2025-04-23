@@ -1,7 +1,8 @@
 use actix_web::{get, web, App, HttpServer};
 use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
-
+mod todolist;
+use todolist::services;
 struct AppState {
     todolist_entries: Mutex<Vec<TodolistEntry>>,
 }
@@ -28,6 +29,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(app_data.clone())
             .service(index)
+            .configure(services::configure)
     })
     .bind(("127.0.0.1", 8000))?
     .run()
